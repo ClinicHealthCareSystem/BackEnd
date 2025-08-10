@@ -1,38 +1,73 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/createUserDto.dto';
+import { updateUserDto } from './dto/updateUserDto.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUser(): Promise<any> {
-    return this.prisma.user.findFirst();
+  async getUser(params: { CPF: string }) {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: { CPF: params.CPF },
+        select: {
+          CPF: true,
+          password: true,
+        },
+      });
+      return user;
+    } catch (error) {
+      throw new Error('error searching for user - ' + error.message);
+    }
   }
 
-  async createUser(params) {
-    const user = await this.prisma.user.create({
-      data: {
-        CPF: params.CPF,
-        password: params.password,
-      },
-    });
-    return user;
+  async createUser(user: CreateUserDto) {
+    try {
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      const createdUser = await this.prisma.user.create({
+        data: { ...user, password: hashPassword },
+      });
+      return createdUser;
+    } catch (error) {
+      throw new Error('Error creating user - ' + error.message);
+    }
   }
 
-  async updateUser(params) {
-    const user = await this.prisma.user.update({
-      where: { id: params.id },
-      data: {
-        password: params.password,
-      },
-    });
-    return user;
+  async updateUser(params: { where: any; data: updateUserDto }) {
+    const { where, data } = params;
+    try {
+      if (data.password) {
+        data.password = await bcrypt.hash(data.password, 10);
+      }
+      return await this.prisma.user.update({
+        where,
+        data,
+      });
+    } catch (error) {
+      throw new Error('Error updating user - ' + error.message);
+    }
   }
 
-  async deleteUser(params) {
-    const user = await this.prisma.user.delete({
-      where: { id: params.id },
-    });
-    return user;
+  async deleteUser(params: { id: number }): Promise<boolean> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: { id: params.id },
+      });
+
+      if (!user) {
+        throw new Error(`User with id: ${params.id} does not exist`);
+      }
+
+      await this.prisma.user.update({
+        where: { id: params.id },
+        data: { deleted: true, active: false },
+      });
+
+      return true;
+    } catch (error) {
+      throw new Error('Error when deleting user - ' + error.message);
+    }
   }
 }

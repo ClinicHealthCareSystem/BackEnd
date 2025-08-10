@@ -20,6 +20,8 @@ model User {
   active        Boolean       @default(true)
   deleted       Boolean       @default(false)
   
+  name          String        
+  email         String        @unique
   CPF           String        @unique
   password      String
   

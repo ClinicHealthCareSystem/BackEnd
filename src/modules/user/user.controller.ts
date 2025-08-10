@@ -1,31 +1,105 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  InternalServerErrorException,
+  NotFoundException,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { UserService } from './user.service';
+import { getUserDto } from './dto/getUserDto.dto';
+import { CreateUserDto } from './dto/createUserDto.dto';
+import { SafeUser } from 'src/shared/types/safe-user';
+import { updateUserDto } from './dto/updateUserDto.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/getUser')
-  async getUser(): Promise<any> {
-    const user = await this.userService.getUser();
-    return user;
+  @Get('/login')
+  async getUser(@Body() param: getUserDto): Promise<any> {
+    try {
+      const user = await this.userService.getUser(param);
+      if (!user) {
+        throw new NotFoundException(
+          `User with CPF: ${param.CPF} dos not exist`,
+        );
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('error when searching for user');
+    }
   }
 
-  @Post('/createUser')
-  async createUser(@Body() params): Promise<string> {
-    const user = await this.userService.createUser(params);
-    return 'User created successfully';
+  @Post('/singUp')
+  async createUser(
+    @Body() createUserDto: CreateUserDto,
+  ): Promise<{ message: string; user: SafeUser }> {
+    try {
+      const created = await this.userService.createUser(createUserDto);
+      if (!created) {
+        throw new Error(`could not create user`);
+      }
+
+      let user = {
+        id: created.id,
+        name: created.name,
+        email: created.email,
+      };
+
+      return {
+        message: 'User created successfully',
+        user,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Failed to create user');
+    }
   }
 
-  @Post('/updateUser')
-  async updateUser(@Body() params) {
-    const user = await this.userService.updateUser(params);
-    return 'User updated successfully';
+  @Patch('/updateUser')
+  async updateUser(
+    @Body() updateUserDto: updateUserDto,
+  ): Promise<{ message: string }> {
+    try {
+      const userUpdated = await this.userService.updateUser({
+        where: { CPF: updateUserDto.CPF },
+        data: updateUserDto,
+      });
+
+      if (!userUpdated) {
+        throw new NotFoundException('user has not been updated');
+      }
+
+      return {
+        message: 'User updated successfully',
+      };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Failed to update user');
+    }
   }
 
-  @Delete('/deleteUser')
-  async deleteUser(@Body() params) {
-    const user = await this.userService.deleteUser(params);
-    return 'User deleted successfully';
+  @Delete('/delete/:id')
+  async deleteUser(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<{ message: string }> {
+    try {
+      const userDeleted = await this.userService.deleteUser({ id });
+      if (!userDeleted) {
+        throw new NotFoundException();
+      }
+      return {
+        message: 'User deleted successfully',
+      };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Failed to delete user');
+    }
   }
 }
