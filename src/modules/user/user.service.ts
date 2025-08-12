@@ -10,7 +10,6 @@ export class UserService {
 
   async login(params: { CPF: string; password: string }) {
     console.log(params);
-    // const hashPassword = await bcrypt.hash(params.password, 10);
     try {
       const user = await this.prisma.user.findFirst({
         where: { CPF: params.CPF },
