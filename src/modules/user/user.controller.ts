@@ -37,7 +37,7 @@ export class UserController {
     }
   }
 
-  @Post('/singUp')
+  @Post('/signUp')
   async createUser(
     @Body(new ValidationPipe()) createUserDto: CreateUserDto,
   ): Promise<{ message: string; user: SafeUser }> {
