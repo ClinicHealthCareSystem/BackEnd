@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { getUserDto } from './dto/getUserDto.dto';
@@ -21,7 +22,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/login')
-  async getUser(@Body() param: getUserDto): Promise<any> {
+  async getUser(@Body(new ValidationPipe()) param: getUserDto): Promise<any> {
     try {
       const user = await this.userService.getUser(param);
       if (!user) {
@@ -38,7 +39,7 @@ export class UserController {
 
   @Post('/singUp')
   async createUser(
-    @Body() createUserDto: CreateUserDto,
+    @Body(new ValidationPipe()) createUserDto: CreateUserDto,
   ): Promise<{ message: string; user: SafeUser }> {
     try {
       const created = await this.userService.createUser(createUserDto);
@@ -64,7 +65,7 @@ export class UserController {
 
   @Patch('/updateUser')
   async updateUser(
-    @Body() updateUserDto: updateUserDto,
+    @Body(new ValidationPipe()) updateUserDto: updateUserDto,
   ): Promise<{ message: string }> {
     try {
       const userUpdated = await this.userService.updateUser({
