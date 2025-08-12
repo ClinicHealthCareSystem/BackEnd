@@ -21,14 +21,13 @@ import { updateUserDto } from './dto/updateUserDto.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/login')
+  @Post('/signIn')
   async getUser(@Body(new ValidationPipe()) param: getUserDto): Promise<any> {
     try {
-      const user = await this.userService.getUser(param);
+      const user = await this.userService.login(param);
+      console.log(user);
       if (!user) {
-        throw new NotFoundException(
-          `User with CPF: ${param.CPF} dos not exist`,
-        );
+        throw new NotFoundException(`incorrect credentials`);
       }
       return user;
     } catch (error) {

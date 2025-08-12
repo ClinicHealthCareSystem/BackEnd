@@ -8,16 +8,33 @@ import { updateUserDto } from './dto/updateUserDto.dto';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getUser(params: { CPF: string }) {
+  async login(params: { CPF: string; password: string }) {
+    console.log(params);
+    // const hashPassword = await bcrypt.hash(params.password, 10);
     try {
       const user = await this.prisma.user.findFirst({
         where: { CPF: params.CPF },
         select: {
-          CPF: true,
+          id: true,
           password: true,
         },
       });
-      return user;
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      const passwordMatch = await bcrypt.compare(
+        params.password,
+        user.password,
+      );
+
+      if (!passwordMatch) {
+        throw new Error("passwords don't match");
+      }
+
+      console.log(user);
+      return { id: user.id };
     } catch (error) {
       throw new Error('error searching for user - ' + error.message);
     }
