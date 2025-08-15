@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/createUserDto.dto';
@@ -15,6 +15,7 @@ export class UserService {
         where: { CPF: params.CPF },
         select: {
           id: true,
+          name: true,
           password: true,
         },
       });
@@ -29,11 +30,12 @@ export class UserService {
       );
 
       if (!passwordMatch) {
-        throw new Error("passwords don't match");
+        throw new UnauthorizedException("passwords don't match");
       }
 
-      console.log(user);
-      return { id: user.id };
+      const { password, ...userWithoutPassword } = user;
+      console.log(userWithoutPassword);
+      return userWithoutPassword;
     } catch (error) {
       throw new Error('error searching for user - ' + error.message);
     }
