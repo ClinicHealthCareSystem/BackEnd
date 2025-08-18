@@ -12,9 +12,9 @@ Copie o arquivo `.env.example` para `.env` e preencha com as variáveis necessá
 
 # Rode os comandos do Prisma:
 
-    - npx prisma migrate dev
-
     - npx prisma generate
+
+    - npx prisma migrate dev
 
 # Rode o projeto:
 
