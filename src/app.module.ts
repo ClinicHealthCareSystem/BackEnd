@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { PrismaModule } from './services/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule],
+  imports: [PrismaModule, UserModule, AuthModule, WhatsappModule],
   controllers: [AppController],
   providers: [AppService],
 })
