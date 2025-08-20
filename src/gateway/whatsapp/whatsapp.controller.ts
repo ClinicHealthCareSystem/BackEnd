@@ -60,6 +60,8 @@ export class WhatsappController {
       const jid = `${phoneWithDDI}@s.whatsapp.net`;
       await this.whatsappService.sendMessage(jid, message);
 
+      await this.otpService.storeOTP(phoneWithDDI, verificationCode);
+
       return {
         sucess: true,
         message: 'Code sent successfully',
@@ -70,5 +72,27 @@ export class WhatsappController {
         message: `Error sending verification code: ${error.message}`,
       };
     }
+  }
+
+  @Post('/verifyCodeAuthenticator')
+  async verifyCode(@Body() body: { phone: string; code: string }) {
+    const phoneWithDDI = `55${body.phone}`;
+
+    const validation = await this.otpService.validateCode(
+      phoneWithDDI,
+      body.code,
+    );
+
+    if (!validation.valid) {
+      return {
+        sucess: false,
+        message: validation.message,
+      };
+    }
+
+    return {
+      success: true,
+      messsage: 'Valid code',
+    };
   }
 }

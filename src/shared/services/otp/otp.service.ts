@@ -1,7 +1,18 @@
 import { Injectable } from '@nestjs/common';
 
+interface OTPSchema {
+  code: string;
+  phone: string;
+  expireIn: Date;
+  attempts: number;
+}
+
 @Injectable()
 export class OTPService {
+  private readonly MINUTES_TO_EXPIRY = 1;
+  private otpStore = new Map<string, OTPSchema>();
+  private MAX_ATTEMPTS = 3;
+
   generateOTP(): string {
     const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let otp = '';
@@ -10,5 +21,45 @@ export class OTPService {
     }
     console.log(otp);
     return otp;
+  }
+
+  async storeOTP(phone: string, code: string) {
+    const expireIn = new Date();
+    expireIn.setMinutes(expireIn.getMinutes() + this.MINUTES_TO_EXPIRY);
+
+    this.otpStore.set(phone, {
+      code,
+      phone,
+      expireIn,
+      attempts: 0,
+    });
+  }
+
+  async validateCode(phone: string, code: string) {
+    const otpData = this.otpStore.get(phone);
+
+    if (!otpData) {
+      return { valid: false, message: 'Código não encontrado ou já expirado' };
+    }
+
+    if (new Date() > otpData.expireIn) {
+      this.otpStore.delete(phone);
+      return { valid: false, message: 'Código expirado' };
+    }
+
+    otpData.attempts++;
+
+    if (otpData.attempts > this.MAX_ATTEMPTS) {
+      this.otpStore.delete(phone);
+      return { valid: false, message: 'You have exceeded the effort limit' };
+    }
+
+    if (otpData.code !== code) {
+      this.otpStore.set(phone, otpData);
+      return { valid: false, message: 'Invalid code, try again' };
+    }
+
+    this.otpStore.delete(phone);
+    return { valid: true, message: 'Valid code' };
   }
 }
