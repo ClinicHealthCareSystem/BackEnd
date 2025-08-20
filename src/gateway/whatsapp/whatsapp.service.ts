@@ -79,7 +79,7 @@ export class WhatsappService implements OnModuleInit {
     return reason !== DisconnectReason.loggedOut;
   }
 
-  async sendMessage(jid: string, content: any): Promise<void> {
+  async sendMessage(jid: string, content: string): Promise<void> {
     if (!this.isConnected || !this.sock) {
       throw new Error('There is no connection to WhatsApp');
     }
@@ -88,8 +88,12 @@ export class WhatsappService implements OnModuleInit {
       throw new Error('Invalid JID format');
     }
 
+    const message = {
+      text: content,
+    };
+
     try {
-      await this.sock.sendMessage(jid, content);
+      await this.sock.sendMessage(jid, message);
     } catch (error) {
       this.logger.log('Error sending message to WhatsApp', error);
       throw error;
