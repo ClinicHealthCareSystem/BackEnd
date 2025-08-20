@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PrismaModule } from './services/prisma/prisma.module';
+import { PrismaModule } from './shared/services/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { WhatsappModule } from './modules/whatsapp/whatsapp.module';
+import { GatewayModule } from './gateway/gatway.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, WhatsappModule],
+  imports: [PrismaModule, UserModule, AuthModule, GatewayModule],
   controllers: [AppController],
   providers: [AppService],
 })
