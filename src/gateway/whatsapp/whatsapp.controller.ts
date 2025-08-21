@@ -68,7 +68,7 @@ export class WhatsappController {
       };
     } catch (error) {
       return {
-        sucess: false,
+        success: false,
         message: `Error sending verification code: ${error.message}`,
       };
     }
