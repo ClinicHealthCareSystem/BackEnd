@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
@@ -16,6 +17,7 @@ import { getUserDto } from './dto/getUserDto.dto';
 import { CreateUserDto } from './dto/createUserDto.dto';
 import { SafeUser } from 'src/shared/types/safe-user';
 import { updateUserDto } from './dto/updateUserDto.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -61,7 +63,8 @@ export class UserController {
       throw new InternalServerErrorException('Failed to create user');
     }
   }
-
+  
+  @UseGuards(AuthGuard)
   @Patch('/updateUser')
   async updateUser(
     @Body(new ValidationPipe()) updateUserDto: updateUserDto,
@@ -85,6 +88,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Delete('/delete/:id')
   async deleteUser(
     @Param('id', ParseIntPipe) id: number,
