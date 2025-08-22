@@ -1,6 +1,6 @@
 import {
   IsAlphanumeric,
-  IsEmail,
+  IsPhoneNumber,
   IsNotEmpty,
   IsString,
   Length,
@@ -20,17 +20,14 @@ export class CreateUserDto {
   })
   name: string;
 
-  @IsEmail(
-    {},
-    {
-      message:
-        'O campo email informado não é válido. Por favor, forneça um email válido.',
-    },
-  )
+  @IsPhoneNumber('BR', {
+    message:
+      'O campo celular informado não é válido. Por favor, forneça um celular válido.',
+  })
   @IsNotEmpty({
     message: 'O campo email é obrigatório. Por favor, forneça um email.',
   })
-  email: string;
+  phone: string;
 
   @Length(6, 6, {
     message: 'A senha precisa ter seis (6) caracteres',

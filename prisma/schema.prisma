@@ -21,7 +21,7 @@ model User {
   deleted       Boolean       @default(false)
   
   name          String        
-  email         String        @unique
+  phone         String        @unique
   CPF           String        @unique
   password      String
   

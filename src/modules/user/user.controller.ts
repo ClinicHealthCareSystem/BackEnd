@@ -49,7 +49,7 @@ export class UserController {
       let user = {
         id: created.id,
         name: created.name,
-        email: created.email,
+        phone: created.phone,
       };
 
       return {
