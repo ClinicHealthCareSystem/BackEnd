@@ -1,4 +1,4 @@
 export type SafeUser = {
-    id: number;
+    id: string;
     name: string;
 };

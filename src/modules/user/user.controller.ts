@@ -91,7 +91,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @Delete('/delete/:id')
   async deleteUser(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
   ): Promise<{ message: string }> {
     try {
       const userDeleted = await this.userService.deleteUser({ id });
