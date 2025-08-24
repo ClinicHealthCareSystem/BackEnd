@@ -56,6 +56,11 @@ export class UserService {
   async updateUser(params: { where: any; data: updateUserDto }) {
     const { where, data } = params;
     try {
+      const existingUser = await this.prisma.user.findFirst({ where });
+      if (!existingUser) {
+        throw new Error('User not found');
+      }
+
       if (data.password) {
         data.password = await bcrypt.hash(data.password, 10);
       }

@@ -64,7 +64,6 @@ export class UserController {
     }
   }
   
-  @UseGuards(AuthGuard)
   @Patch('/updateUser')
   async updateUser(
     @Body(new ValidationPipe()) updateUserDto: updateUserDto,
