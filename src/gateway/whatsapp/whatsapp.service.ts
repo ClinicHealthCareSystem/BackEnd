@@ -27,7 +27,7 @@ export class WhatsappService implements OnModuleInit {
       this.sock = makeWASocket({
         auth: state,
         printQRInTerminal: false,
-        logger: pino({ level: 'info' }),
+        logger: pino({ level: 'silent' }),
       });
 
       this.sock.ev.on('creds.update', saveCreds);
