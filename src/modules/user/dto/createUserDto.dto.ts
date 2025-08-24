@@ -7,9 +7,9 @@ import {
 } from 'class-validator';
 
 export class CreateUserDto {
-  @Length(3, 35, {
+  @Length(3, 50, {
     message:
-      'O campo nome precisa ter mais de três (3) caracteres e menos que trinta e cinto (35) caracteres',
+      'O campo nome precisa ter mais de três (3) caracteres e menos que trinta e cinto (50) caracteres',
   })
   @IsString({
     message:
@@ -29,8 +29,8 @@ export class CreateUserDto {
   })
   phone: string;
 
-  @Length(6, 6, {
-    message: 'A senha precisa ter seis (6) caracteres',
+  @Length(8, 8, {
+    message: 'A senha precisa ter seis (8) caracteres',
   })
   @IsAlphanumeric()
   @IsNotEmpty({

@@ -39,12 +39,12 @@ export class OTPService {
     const otpData = this.otpStore.get(phone);
 
     if (!otpData) {
-      return { valid: false, message: 'Código não encontrado ou já expirado' };
+      return { valid: false, message: 'Code not found' };
     }
 
     if (new Date() > otpData.expireIn) {
       this.otpStore.delete(phone);
-      return { valid: false, message: 'Código expirado' };
+      return { valid: false, message: 'Expired code' };
     }
 
     otpData.attempts++;

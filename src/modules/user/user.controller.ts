@@ -18,6 +18,7 @@ import { CreateUserDto } from './dto/createUserDto.dto';
 import { SafeUser } from 'src/shared/types/safe-user';
 import { updateUserDto } from './dto/updateUserDto.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import { UpdatePasswordDto } from './dto/updatePasswordDto.dto';
 
 @Controller('user')
 export class UserController {
@@ -63,7 +64,7 @@ export class UserController {
       throw new InternalServerErrorException('Failed to create user');
     }
   }
-  
+
   @Patch('/updateUser')
   async updateUser(
     @Body(new ValidationPipe()) updateUserDto: updateUserDto,
@@ -103,6 +104,29 @@ export class UserController {
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException('Failed to delete user');
+    }
+  }
+
+  @Patch('/updatePassword')
+  async updatePassword(
+    @Body(new ValidationPipe()) updatePassword: UpdatePasswordDto,
+  ): Promise<{ message: string }> {
+    try {
+      const userUpdated = await this.userService.updatePassword({
+        where: { CPF: updatePassword.CPF },
+        data: updatePassword,
+      });
+
+      if (!userUpdated) {
+        throw new NotFoundException('user has not been updated');
+      }
+
+      return {
+        message: 'User Password updated successfully',
+      };
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Failed to update password user');
     }
   }
 }
