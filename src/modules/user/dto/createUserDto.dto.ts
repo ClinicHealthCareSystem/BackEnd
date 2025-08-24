@@ -29,7 +29,7 @@ export class CreateUserDto {
   })
   phone: string;
 
-  @Length(8, 8, {
+  @Length(8, 12, {
     message: 'A senha precisa ter seis (8) caracteres',
   })
   @IsAlphanumeric()

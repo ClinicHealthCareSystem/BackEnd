@@ -10,7 +10,7 @@ export class UpdatePasswordDto {
   })
   CPF: string;
 
-  @Length(8, 8, {
+  @Length(8, 12, {
     message: 'A senha precisa ter seis (6) caracteres',
   })
   @IsAlphanumeric()

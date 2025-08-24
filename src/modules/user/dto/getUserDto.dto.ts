@@ -10,7 +10,7 @@ export class getUserDto {
   })
   CPF: string;
 
-  @Length(6, 6, {
+  @Length(8, 12, {
     message: 'A senha precisa ter seis (6) caracteres',
   })
   @IsAlphanumeric()
