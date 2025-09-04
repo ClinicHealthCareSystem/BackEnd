@@ -39,27 +39,27 @@ export class OTPService {
     const otpData = this.otpStore.get(phone);
 
     if (!otpData) {
-      return { valid: false, message: 'Code not found' };
+      return { valid: false, message: 'Código não encontrado' };
     }
 
     if (new Date() > otpData.expireIn) {
       this.otpStore.delete(phone);
-      return { valid: false, message: 'Expired code' };
+      return { valid: false, message: 'Código expirado' };
     }
 
     otpData.attempts++;
 
     if (otpData.attempts > this.MAX_ATTEMPTS) {
       this.otpStore.delete(phone);
-      return { valid: false, message: 'You have exceeded the effort limit' };
+      return { valid: false, message: 'Você passou do limite de tentativas' };
     }
 
     if (otpData.code !== code) {
       this.otpStore.set(phone, otpData);
-      return { valid: false, message: 'Invalid code, try again' };
+      return { valid: false, message: 'Código inválido, tente novamente' };
     }
 
     this.otpStore.delete(phone);
-    return { valid: true, message: 'Valid code' };
+    return { valid: true, message: 'Código válido' };
   }
 }
