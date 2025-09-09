@@ -16,8 +16,6 @@ Copie o arquivo `.env.example` para `.env` e preencha com as variáveis necessá
 
     - yarn prisma migrate dev
 
-    - npx prisma migrate dev
-
 # Rode o projeto:
 
     yarn start:dev
