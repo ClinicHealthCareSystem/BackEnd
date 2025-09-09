@@ -4,18 +4,20 @@
 
 # Instale as dependências:
 
-    - npm install
+    - yarn install
 
 # Crie um arquivo .env
 
 Copie o arquivo `.env.example` para `.env` e preencha com as variáveis necessárias:
 
-# Rode os comandos do Prisma:
+# Rode os comandos do Prisma ORM:
 
-    - npx prisma generate
+    - yarn prisma generate
+
+    - yarn prisma migrate dev
 
     - npx prisma migrate dev
 
 # Rode o projeto:
 
-    npm run start:dev
+    yarn start:dev
