@@ -60,3 +60,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 #migrations
 prisma/migrations/*dev*/
 prisma/dbml/*
+
+#tokens de autenticação do whatsappWebSocket
+auth_info_bailyes/

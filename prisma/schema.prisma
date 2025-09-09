@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id            Int           @id @default(autoincrement())
+  id            String        @id @default(uuid())
   created_at    DateTime      @default(now())
   updated_at    DateTime      @updatedAt
   active        Boolean       @default(true)
   deleted       Boolean       @default(false)
   
-  name          String
-  email         String        @unique
+  name          String        
+  phone         String        @unique
+  CPF           String        @unique
   password      String
   
   @@map("user")
