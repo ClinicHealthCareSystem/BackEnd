@@ -13,6 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TipoAgendamento {
+  CONSULTA
+  EXAME
+}
+
+enum StatusAgendamento {
+  PENDENTE
+  CONFIRMADO
+  CANCELADO
+}
+
 model User {
   id            String        @id @default(uuid())
   created_at    DateTime      @default(now())
@@ -31,10 +42,10 @@ model User {
 
 model Agendamento {
   id          String        @id @default(uuid())
-  Tipo        TipoAgendamento
-  Data        DateTime      @default(now())
-  Hora
-  Status      StatusAgendamento
+  tipo        TipoAgendamento
+  data        DateTime      @default(now())
+  hora        String
+  status      StatusAgendamento
 
   usuario_id  String
   unidade_id  String

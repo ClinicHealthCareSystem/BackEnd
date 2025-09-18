@@ -8,10 +8,10 @@ import { AuthGuard } from '../auth/auth.guard';
 export class AgendamentoController {
   constructor(private readonly agendamentoService: AgendamentoService) { }
 
-  @UseGuards(AuthGuard)
+
   @Post()
-  create(@Body() createAgendamentoDto: CreateAgendamentoDto, @Req() req) {
-    
+  create(@Body() dto: CreateAgendamentoDto) {
+    return this.agendamentoService.create(dto);
   }
 
   @Get()
