@@ -13,47 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Exame {
-  id             String         @id @default(uuid())
-  agendamentoId  String
-  agendamento    Agendamento    @relation(fields: [agendamentoId], references: [id])
-
-  exameTipoId    String
-  exameTipo      ExameTipo      @relation(fields: [exameTipoId], references: [id])
-
-  status         StatusExame     @default(AGENDADO)
-  dateExecution  DateTime?
-  laboratorio    String?
-  medicoSolicitante String?
-
-  resultadoFormato ResultadoFormato?
-  resultado       Json?          // quando JSON estruturado
-  laudoPdfUrl     String?        // quando PDF
-  referencia      Json?
-
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-
-  anexos          ExameAnexo[]
-}
-
-model ExameAnexo {
-  id        String   @id @default(uuid())
-  exameId   String
-  exame     Exame    @relation(fields: [exameId], references: [id])
-  url       String
-  tipo      String?
-  createdAt DateTime @default(now())
-}
-
-model ExameTipo {
-  id        String   @id @default(uuid())
-  codigo    String   @unique
-  nome      String
-  preparo   String?
-  exames    Exame[]
-}
-
 model User {
   id            String        @id @default(uuid())
   created_at    DateTime      @default(now())
@@ -66,29 +25,9 @@ model User {
   CPF           String        @unique
   password      String
   exames Exame[]
+  agendamento Agendamento[]
   
   @@map("user")
 }
 
-model Agendamento{
-  id           String           @id @default(uuid())
-  tipo         TipoAgendamento
-  status       StatusAgendamento @default(AGENDADO)
 
-  pacienteId   String
-  paciente     User             @relation(fields: [pacienteId], references: [id])
-
-  unidadeId    String
-  unidade      Unidade          @relation(fields: [unidadeId], references: [id])
-
-  profissionalId String?        // opcional (médico)
-  convenioId     String?        // opcional
-
-  dataHora     DateTime
-  observacoes  String?
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-
-  exames       Exame[]
-  consulta     Consulta?
-}
