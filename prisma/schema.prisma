@@ -18,6 +18,11 @@ enum TipoAgendamento {
   EXAME
 }
 
+enum TipoAtendimento{
+  PRESENCIAL
+  REMOTO
+}
+
 enum StatusAgendamento {
   PENDENTE
   CONFIRMADO
@@ -45,7 +50,7 @@ model Agendamento {
   tipo        TipoAgendamento
   data        DateTime      @default(now())
   hora        String
-  status      StatusAgendamento
+  status      StatusAgendamento @default(PENDENTE)
 
   usuario_id  String
   unidade_id  String
@@ -54,20 +59,33 @@ model Agendamento {
   usuario     User               @relation(fields: [usuario_id], references: [id])
   unidade     Unidade            @relation(fields: [unidade_id], references: [id])
   convenio    Convenio           @relation(fields: [convenio_id], references: [id])
+}
 
+model Consulta{
+  id          String        @id @default(uuid())
+  servico     String
+  atendimento TipoAtendimento
+  agendamento_id  String    @unique
+  agendamento Agendamento   @relation(fields: [agendamento_id], references: [id])
+}
+
+model Exame{
+  id             String       @id @default(uuid())
+  nome           String
+  agendamento_id String       @unique
+  agendamento    Agendamento  @relation(fields: [agendamento_id], references: [id])
 }
 
 model Unidade{
   id          String        @id @default(uuid())
-  nome        String
-
+  nome        String        @unique
 
   agendamento Agendamento[]
 }
 
 model Convenio{
   id          String        @id @default(uuid())
-  nome        String
+  nome        String        @unique
 
   agendamento Agendamento[]
 }

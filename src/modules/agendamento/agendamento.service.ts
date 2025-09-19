@@ -1,24 +1,58 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAgendamentoDto } from './dto/create-agendamento.dto';
 import { UpdateAgendamentoDto } from './dto/update-agendamento.dto';
 import { PrismaService } from 'src/shared/services/prisma/prisma.service';
-import { Prisma } from '@prisma/client';
-
-
 
 @Injectable()
 export class AgendamentoService {
   constructor(private readonly prisma: PrismaService) { }
-  create(dto: CreateAgendamentoDto) {
-    this.prisma.agendamento.create({
+
+  async create(dto: CreateAgendamentoDto, usuario_id: string) {
+
+    const dataAgendada = new Date(`${dto.data}T${dto.hora}:00`);
+
+    if (dataAgendada < new Date()) {
+      throw new BadRequestException(
+        'Não é possível agendar em uma data/hora no passado.',
+      );
+    }
+
+    const agendamentoExistente = await this.prisma.agendamento.findFirst({
+      where: {
+        tipo: dto.tipo,
+        data: new Date(dto.data),
+        hora: dto.hora,
+      },
+    });
+
+    if (agendamentoExistente) {
+      throw new ConflictException(
+        `Já existe um agendamento para ${dto.data} às ${dto.hora}.`,
+      );
+    }
+
+    const unidade = await this.prisma.unidade.findUnique({
+      where: { nome: dto.unidade },
+    });
+    if (!unidade) {
+      throw new NotFoundException(`Unidade '${dto.unidade}' não encontrada.`);
+    }
+
+    const convenio = await this.prisma.convenio.findUnique({
+      where: { nome: dto.convenio },
+    });
+    if (!convenio) {
+      throw new NotFoundException(`Convênio '${dto.convenio}' não encontrado.`);
+    }
+    
+    return this.prisma.agendamento.create({
       data: {
         tipo: dto.tipo,
         data: new Date(dto.data),
         hora: dto.hora,
-        status: dto.status,
-        usuario: { connect: { id: dto.usuario_id } },
-        unidade: { connect: { id: dto.unidade_id } },
-        convenio: { connect: { id: dto.convenio_id } },
+        usuario: { connect: { id: usuario_id } },
+        unidade: { connect: { nome: dto.unidade } },
+        convenio: { connect: { nome: dto.convenio } },
 
       },
       include: {

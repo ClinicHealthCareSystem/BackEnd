@@ -10,8 +10,10 @@ export class AgendamentoController {
 
 
   @Post()
-  create(@Body() dto: CreateAgendamentoDto) {
-    return this.agendamentoService.create(dto);
+  @UseGuards(AuthGuard)
+  create(@Body() dto: CreateAgendamentoDto, @Req() req) {
+    const usuarioId = req.user.sub
+    return this.agendamentoService.create(dto, usuarioId);
   }
 
   @Get()

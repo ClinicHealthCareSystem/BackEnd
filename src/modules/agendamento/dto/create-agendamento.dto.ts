@@ -1,5 +1,5 @@
-import { IsUUID, IsEnum, IsOptional, IsDateString, IsString } from 'class-validator';
-import { TipoAgendamento, StatusAgendamento } from '@prisma/client';
+import { IsUUID, IsEnum, IsDateString, IsString } from 'class-validator';
+import { TipoAgendamento } from '@prisma/client';
 export class CreateAgendamentoDto {
     @IsEnum(TipoAgendamento)
     tipo: TipoAgendamento;
@@ -10,19 +10,11 @@ export class CreateAgendamentoDto {
     @IsDateString()
     hora: string;
 
-    @IsEnum(StatusAgendamento)
-    status: StatusAgendamento;
+    @IsString()
+    unidade: string;
 
-    @IsUUID()
-    usuario_id: string;
-
-    @IsUUID()
-    unidade_id: string;
-
-    @IsUUID()
-    convenio_id: string;
-
-
+    @IsString()
+    convenio: string;
 
 }
 
