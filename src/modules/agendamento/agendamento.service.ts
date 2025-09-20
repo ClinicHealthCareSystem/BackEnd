@@ -44,7 +44,7 @@ export class AgendamentoService {
     if (!convenio) {
       throw new NotFoundException(`Convênio '${dto.convenio}' não encontrado.`);
     }
-    
+
     return this.prisma.agendamento.create({
       data: {
         tipo: dto.tipo,
@@ -54,11 +54,30 @@ export class AgendamentoService {
         unidade: { connect: { nome: dto.unidade } },
         convenio: { connect: { nome: dto.convenio } },
 
+
+        ...(dto.tipo === 'CONSULTA'
+          ? {
+            consulta: {
+              create: {
+                servico: dto.servico,
+                atendimento: dto.tipoAtendimento, 
+              },
+            },
+          }
+          : {
+            exame: {
+              create: {
+                nome: dto.nome,
+              },
+            },
+          }),
       },
       include: {
         usuario: true,
         unidade: true,
         convenio: true,
+        consulta: true,
+        exame: true,
       }
     });
   }
