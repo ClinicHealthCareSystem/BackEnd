@@ -5,9 +5,10 @@ import { PrismaModule } from './shared/services/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GatewayModule } from './gateway/gatway.module';
+import { AgendamentoModule } from './modules/agendamento/agendamento.module';
 
 @Module({
-  imports: [PrismaModule, UserModule, AuthModule, GatewayModule],
+  imports: [PrismaModule, UserModule, AuthModule, GatewayModule, AgendamentoModule],
   controllers: [AppController],
   providers: [AppService],
 })

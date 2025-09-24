@@ -4,7 +4,7 @@ import makeWASocket, {
   DisconnectReason,
   useMultiFileAuthState,
   WASocket,
-} from '@whiskeysockets/baileys';
+} from 'baileys';
 import { Boom } from '@hapi/boom';
 import * as qrcode from 'qrcode-terminal';
 import pino from 'pino';

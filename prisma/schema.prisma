@@ -24,6 +24,10 @@ model User {
   phone         String        @unique
   CPF           String        @unique
   password      String
+  exames Exame[]
+  agendamento Agendamento[]
   
   @@map("user")
 }
+
+
