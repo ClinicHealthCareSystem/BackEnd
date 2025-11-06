@@ -38,6 +38,17 @@ export class AuthController {
         name: true,
         phone: true,
         CPF: true,
+        created_at: true,
+        address: true,
+        age: true,
+        blood: true,
+        email: true,
+        height: true,
+        weight: true,
+        IMC: true,
+        plan: true,
+        phoneHelp: true,
+        registration: true,
       },
     });
   }

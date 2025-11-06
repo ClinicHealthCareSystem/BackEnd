@@ -40,7 +40,17 @@ model User {
   phone         String        @unique
   CPF           String        @unique
   password      String
-  agendamento Agendamento[]
+  plan          String?
+  registration  String?       @unique
+  email         String?       @unique
+  age           Int?
+  address       String?
+  blood         String?
+  height        String?
+  weight        String?
+  IMC           String?
+  phoneHelp     String?
+  agendamento   Agendamento[]
   
   @@map("user")
 }
