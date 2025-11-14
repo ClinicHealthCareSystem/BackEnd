@@ -28,13 +28,11 @@ export class UserController {
   async getUser(@Body(new ValidationPipe()) param: getUserDto): Promise<any> {
     try {
       const user = await this.userService.login(param);
-      console.log(user);
       if (!user) {
         throw new NotFoundException(`incorrect credentials`);
       }
       return user;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('error when searching for user');
     }
   }
@@ -60,7 +58,6 @@ export class UserController {
         user,
       };
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Failed to create user');
     }
   }
@@ -83,7 +80,6 @@ export class UserController {
         message: 'User updated successfully',
       };
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Failed to update user');
     }
   }
@@ -102,7 +98,6 @@ export class UserController {
         message: 'User deleted successfully',
       };
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Failed to delete user');
     }
   }
@@ -125,8 +120,39 @@ export class UserController {
         message: 'User Password updated successfully',
       };
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Failed to update password user');
+    }
+  }
+
+  @Patch('/updateUserProfile')
+  async updateUserInfo(
+    @Body(new ValidationPipe())
+    updatedUser: {
+      cpf: string;
+      email: string;
+      phone: string;
+      address: string;
+    },
+  ): Promise<{ message: string }> {
+    try {
+      const userUpdateInfo = await this.userService.updateUserInfo({
+        cpf: updatedUser.cpf,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        address: updatedUser.address,
+      });
+
+      if (!userUpdateInfo) {
+        return {
+          message: 'It was not possible to update the information.',
+        };
+      }
+
+      return { message: 'User info updated successfully' };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Failed to update user information.',
+      );
     }
   }
 }

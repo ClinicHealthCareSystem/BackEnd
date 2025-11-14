@@ -118,4 +118,31 @@ export class UserService {
       throw new Error('Error updating user - ' + error.message);
     }
   }
+
+  async updateUserInfo(updatedUser: {
+    cpf: string;
+    email: string;
+    phone: string;
+    address: string;
+  }) {
+    try {
+      const { cpf, email, phone, address } = updatedUser;
+      const existingUser = await this.prisma.user.findFirst({
+        where: {
+          CPF: cpf,
+        },
+      });
+
+      if (!existingUser) {
+        throw new Error('User Not Found');
+      }
+
+      return await this.prisma.user.update({
+        where: { CPF: cpf },
+        data: { email, phone, address },
+      });
+    } catch (error) {
+      throw new Error('Error updating user - ' + error.message);
+    }
+  }
 }
