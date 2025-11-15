@@ -124,9 +124,10 @@ export class UserService {
     email: string;
     phone: string;
     address: string;
+    phoneHelp: string | null;
   }) {
     try {
-      const { cpf, email, phone, address } = updatedUser;
+      const { cpf, email, phone, address, phoneHelp } = updatedUser;
       const existingUser = await this.prisma.user.findFirst({
         where: {
           CPF: cpf,
@@ -139,7 +140,12 @@ export class UserService {
 
       return await this.prisma.user.update({
         where: { CPF: cpf },
-        data: { email, phone, address },
+        data: {
+          email,
+          phone,
+          address,
+          ...(phoneHelp !== undefined && { phoneHelp }),
+        },
       });
     } catch (error) {
       throw new Error('Error updating user - ' + error.message);

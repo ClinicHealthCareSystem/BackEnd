@@ -132,14 +132,21 @@ export class UserController {
       email: string;
       phone: string;
       address: string;
+      phoneHelp?: string | null;
     },
   ): Promise<{ message: string }> {
     try {
+      const phoneHelp =
+        updatedUser.phoneHelp && updatedUser.phoneHelp.trim() !== ''
+          ? updatedUser.phoneHelp
+          : null;
+
       const userUpdateInfo = await this.userService.updateUserInfo({
         cpf: updatedUser.cpf,
         email: updatedUser.email,
         phone: updatedUser.phone,
         address: updatedUser.address,
+        phoneHelp,
       });
 
       if (!userUpdateInfo) {
