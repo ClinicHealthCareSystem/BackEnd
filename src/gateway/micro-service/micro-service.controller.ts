@@ -26,7 +26,6 @@ export class MicroServiceController {
       const response = await this.microService.sendMessage(input);
       return response;
     } catch (error) {
-      console.log('Não foi possível enviar mensagem para a llm', error);
       throw new HttpException(
         'Erro ao processar mensagem',
         HttpStatus.INTERNAL_SERVER_ERROR,
