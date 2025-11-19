@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { GatewayModule } from './gateway/gatway.module';
 import { AgendamentoModule } from './modules/agendamento/agendamento.module';
 import { HttpModule } from '@nestjs/axios';
+import { PlanoModule } from './modules/plano/plano.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { HttpModule } from '@nestjs/axios';
     GatewayModule,
     AgendamentoModule,
     HttpModule,
+    PlanoModule
   ],
   controllers: [AppController],
   providers: [AppService],
