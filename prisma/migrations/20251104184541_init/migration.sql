@@ -21,6 +21,17 @@ CREATE TABLE "user" (
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
+CREATE TABLE "medicUser" (
+    "id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "deleted" BOOLEAN NOT NULL DEFAULT false,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+
+    CONSTRAINT "user_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Agendamento" (
