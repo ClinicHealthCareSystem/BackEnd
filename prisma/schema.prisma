@@ -54,6 +54,7 @@ model User {
   
   @@map("user")
 }
+
 model MedicUser {
   id            String        @id @default(uuid())
   created_at    DateTime      @default(now())
@@ -63,8 +64,8 @@ model MedicUser {
   
   name          String        
   email         String        @unique
-  email         String?       @unique
   age           Int?
+  CRM           String        @unique
   agendamento   Agendamento[]
   
   @@map("medicUser")
@@ -78,10 +79,12 @@ model Agendamento {
   status      StatusAgendamento @default(PENDENTE)
 
   usuario_id  String
+  medic_id    String
   unidade_id  String
   convenio_id String
 
   usuario     User               @relation(fields: [usuario_id], references: [id])
+  medic       MedicUser          @relation(fields: [medic_id], references: [id])
   unidade     Unidade            @relation(fields: [unidade_id], references: [id])
   convenio    Convenio           @relation(fields: [convenio_id], references: [id])
 
