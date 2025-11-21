@@ -5,7 +5,7 @@ import { PrismaModule } from './shared/services/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GatewayModule } from './gateway/gatway.module';
-import { AgendamentoModule } from './modules/agendamento/agendamento.module';
+// import { AgendamentoModule } from './modules/agendamento/agendamento.module';
 import { HttpModule } from '@nestjs/axios';
 import { PlanoModule } from './modules/plano/plano.module';
 
@@ -15,7 +15,7 @@ import { PlanoModule } from './modules/plano/plano.module';
     UserModule,
     AuthModule,
     GatewayModule,
-    AgendamentoModule,
+    // AgendamentoModule,
     HttpModule,
     PlanoModule
   ],
