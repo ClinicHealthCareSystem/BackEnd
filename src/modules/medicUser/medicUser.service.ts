@@ -2,10 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/shared/services/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 
-
-
 @Injectable()
-export class UserService {
+export class MedicService {
   constructor(private readonly prisma: PrismaService) {}
 
   async login(params: { email: string; password: string }) {
@@ -39,7 +37,6 @@ export class UserService {
     }
   }
 
-
   async deleteUser(params: { id: string }): Promise<boolean> {
     try {
       const user = await this.prisma.user.findFirst({
@@ -60,5 +57,4 @@ export class UserService {
       throw new Error('Error when deleting user - ' + error.message);
     }
   }
-
 }

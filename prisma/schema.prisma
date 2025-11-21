@@ -66,6 +66,7 @@ model MedicUser {
   email         String        @unique
   age           Int?
   CRM           String        @unique
+  password      String
   agendamento   Agendamento[]
   
   @@map("medicUser")

@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, Matches, Length } from 'class-validator';
 
-export class getUserDto {
+export class getMedicDto {
 
   @IsEmail({}, { message: 'Forneça um e-mail válido.' })
   @Matches(/^2025\d{5}@saude\.com$/, {
