@@ -8,16 +8,18 @@ import { GatewayModule } from './gateway/gatway.module';
 // import { AgendamentoModule } from './modules/agendamento/agendamento.module';
 import { HttpModule } from '@nestjs/axios';
 import { PlanoModule } from './modules/plano/plano.module';
+import { MedicModule } from './modules/medicUser/medicUser.module';
 
 @Module({
   imports: [
     PrismaModule,
     UserModule,
+    MedicModule,
     AuthModule,
     GatewayModule,
     // AgendamentoModule,
     HttpModule,
-    PlanoModule
+    PlanoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
