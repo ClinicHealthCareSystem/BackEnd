@@ -24,4 +24,11 @@ export class MedicineService {
 
     return newMedicine;
   }
+
+  async getMedicinesByUser(userId: string) {
+    return await this.prisma.medicamento.findMany({
+      where: { usuarioId: userId },
+      orderBy: { created_at: 'desc' },
+    });
+  }
 }

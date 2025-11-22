@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { medicineDataDto } from './dto/medicineDataDto.dto';
 
@@ -22,5 +22,10 @@ export class MedicineController {
         error.message,
       );
     }
+  }
+
+  @Get('/byUser/:userId')
+  async getMedicines(@Param('userId') userId: string) {
+    return this.medicineService.getMedicinesByUser(userId);
   }
 }
