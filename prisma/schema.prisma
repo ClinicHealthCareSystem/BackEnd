@@ -93,8 +93,8 @@ model Medicamento {
   dataTermino    String
   nomeMedico     String
 
-  medicId        String
-  medico         MedicUser @relation(fields: [medicId], references: [id])
+  medicId        String?
+  medico         MedicUser? @relation(fields: [medicId], references: [id])
   usuarioId      String
   usuario        User @relation(fields: [usuarioId], references: [id])
 

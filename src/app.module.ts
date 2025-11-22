@@ -9,6 +9,7 @@ import { GatewayModule } from './gateway/gatway.module';
 import { HttpModule } from '@nestjs/axios';
 import { PlanoModule } from './modules/plano/plano.module';
 import { MedicModule } from './modules/medicUser/medicUser.module';
+import { MedicineModule } from './modules/medicines/medicine.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MedicModule } from './modules/medicUser/medicUser.module';
     // AgendamentoModule,
     HttpModule,
     PlanoModule,
+    MedicineModule,
   ],
   controllers: [AppController],
   providers: [AppService],
