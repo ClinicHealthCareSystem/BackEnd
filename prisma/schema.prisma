@@ -68,9 +68,33 @@ model MedicUser {
   CRM           String        @unique
   password      String
   specialty     String
-  agendamento   Agendamento[]
   
+  agendamento   Agendamento[]
+  medicamentos  Medicamento[]
+
   @@map("medicUser")
+}
+
+model Medicamento {
+  id             String    @id @default(uuid())
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  active         Boolean   @default(true)
+  deleted        Boolean   @default(false)
+
+  nome           String
+  dosagem        String
+  vezesAoDia     String
+  horarioManha   String?
+  horarioTarde   String?
+  dataInicio     String
+  dataTermino    String
+  nomeMedico     String
+
+  medicId        String
+  medico         MedicUser @relation(fields: [medicId], references: [id])
+
+  @@map("medicamento")
 }
 
 model Agendamento {
