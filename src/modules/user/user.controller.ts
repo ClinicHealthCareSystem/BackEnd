@@ -162,4 +162,17 @@ export class UserController {
       );
     }
   }
+
+  @Get('/fetchUsers')
+  async fetchUsers() {
+    try {
+      const users = await this.userService.fetchAllUsers();
+      if (!users) {
+        throw new Error('error when fetching for users');
+      }
+      return users;
+    } catch (error) {
+      throw new Error('error when fetching for users - ' + error.message);
+    }
+  }
 }

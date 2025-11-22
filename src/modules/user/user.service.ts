@@ -151,4 +151,25 @@ export class UserService {
       throw new Error('Error updating user - ' + error.message);
     }
   }
+
+  async fetchAllUsers() {
+    try {
+      const users = await this.prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          age: true,
+          phone: true,
+        },
+      });
+
+      if (!users) {
+        throw new Error('error when fetching for users');
+      }
+
+      return users;
+    } catch (error) {
+      throw new Error('error when fetching for users - ' + error.message);
+    }
+  }
 }
