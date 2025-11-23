@@ -7,9 +7,20 @@ import { AuthModule } from './modules/auth/auth.module';
 import { GatewayModule } from './gateway/gatway.module';
 import { AgendamentoModule } from './modules/agendamento/agendamento.module';
 import { HttpModule } from '@nestjs/axios';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      throttlers:[
+      {
+      ttl: 60000,  
+      limit: 100  
+      }
+      ],  
+    }),
     PrismaModule,
     UserModule,
     AuthModule,
@@ -18,6 +29,11 @@ import { HttpModule } from '@nestjs/axios';
     HttpModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard  
+    },
+  ],
 })
 export class AppModule {}
