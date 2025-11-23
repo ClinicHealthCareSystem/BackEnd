@@ -10,9 +10,20 @@ import { HttpModule } from '@nestjs/axios';
 import { PlanoModule } from './modules/plano/plano.module';
 import { MedicModule } from './modules/medicUser/medicUser.module';
 import { MedicineModule } from './modules/medicines/medicine.module';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      throttlers:[
+      {
+      ttl: 60000,  
+      limit: 100  
+      }
+      ],  
+    }),
     PrismaModule,
     UserModule,
     MedicModule,
@@ -24,6 +35,11 @@ import { MedicineModule } from './modules/medicines/medicine.module';
     MedicineModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard  
+    },
+  ],
 })
 export class AppModule {}
