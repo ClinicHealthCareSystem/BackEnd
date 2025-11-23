@@ -19,7 +19,6 @@ export class OTPService {
     for (let i = 0; i < 6; i++) {
       otp += numbers[Math.floor(Math.random() * numbers.length)];
     }
-    console.log(otp);
     return otp;
   }
 

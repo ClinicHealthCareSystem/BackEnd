@@ -40,9 +40,65 @@ model User {
   phone         String        @unique
   CPF           String        @unique
   password      String
-  agendamento Agendamento[]
+  plan          String?
+  registration  String?       @unique
+  email         String?       @unique
+  age           Int?
+  address       String?
+  blood         String?
+  height        String?
+  weight        String?
+  IMC           String?
+  phoneHelp     String?
+
+  agendamento   Agendamento[]
+  medicamentos  Medicamento[]
   
   @@map("user")
+}
+
+model MedicUser {
+  id            String        @id @default(uuid())
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  active        Boolean       @default(true)
+  deleted       Boolean       @default(false)
+  
+  name          String        
+  email         String        @unique
+  age           Int?
+  CRM           String        @unique
+  password      String
+  specialty     String
+  
+  agendamento   Agendamento[]
+  medicamentos  Medicamento[]
+
+  @@map("medicUser")
+}
+
+model Medicamento {
+  id             String    @id @default(uuid())
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+  active         Boolean   @default(true)
+  deleted        Boolean   @default(false)
+
+  nome           String
+  dosagem        String
+  vezesAoDia     String
+  horarioManha   String?
+  horarioTarde   String?
+  dataInicio     String
+  dataTermino    String
+  nomeMedico     String
+
+  medicId        String?
+  medico         MedicUser? @relation(fields: [medicId], references: [id])
+  usuarioId      String
+  usuario        User @relation(fields: [usuarioId], references: [id])
+
+  @@map("medicamento")
 }
 
 model Agendamento {
@@ -53,10 +109,12 @@ model Agendamento {
   status      StatusAgendamento @default(PENDENTE)
 
   usuario_id  String
+  medic_id    String
   unidade_id  String
   convenio_id String
 
   usuario     User               @relation(fields: [usuario_id], references: [id])
+  medic       MedicUser          @relation(fields: [medic_id], references: [id])
   unidade     Unidade            @relation(fields: [unidade_id], references: [id])
   convenio    Convenio           @relation(fields: [convenio_id], references: [id])
 
