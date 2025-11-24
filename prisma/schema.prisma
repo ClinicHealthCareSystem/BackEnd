@@ -86,17 +86,26 @@ model Medicamento {
 }
 
 model Agendamento {
-  id             String     @id @default(uuid())
-  type           String
-  medicName      String
-  service        String
-  unit           String
-  serviceModel   String
-  serviceDate    String
-  serviceTime    String
+  id           String           @id @default(uuid())
+  type         AgendamentoTipo
 
-  medicId        String?
-  medico         MedicUser? @relation(fields: [medicId], references: [id])
-  usuarioId      String
-  usuario        User       @relation(fields: [usuarioId], references: [id])
+  unit         String
+  serviceModel String
+  serviceDate  String
+  serviceTime  String
+  
+  medicName    String?   
+  service      String?   
+  medicId      String?
+  medico       MedicUser?       @relation(fields: [medicId], references: [id])
+
+  exame        String?   
+
+  usuarioId    String
+  usuario      User             @relation(fields: [usuarioId], references: [id])
+}
+
+enum AgendamentoTipo {
+  consulta
+  exame
 }

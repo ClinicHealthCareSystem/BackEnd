@@ -33,4 +33,25 @@ export class SchedulingService {
       orderBy: { serviceDate: 'asc' },
     });
   }
+
+  async scheduleExam(formData: any) {
+    const scheduling = await this.prisma.agendamento.create({
+      data: {
+        type: formData.type,
+        exame: formData.exame,
+        unit: formData.unidade,
+        serviceModel: formData.atendimento,
+        serviceDate: formData.data,
+        serviceTime: formData.horario,
+        usuarioId: formData.userId,
+        medicId: formData.medicId ?? null,
+      },
+    });
+
+    if (!scheduling) {
+      throw new Error('An error occurred while scheduling your exam.');
+    }
+
+    return 'success';
+  }
 }

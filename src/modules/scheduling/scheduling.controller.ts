@@ -37,4 +37,24 @@ export class SchedulingController {
   async getSchedules(@Param('userId') userId: string) {
     return this.schedulingService.getSchedules(userId);
   }
+
+  @Post('/exams')
+  async schedulingExams(
+    @Body() formData: any,
+  ): Promise<{ success: boolean; message: string }> {
+    try {
+      const scheduled = await this.schedulingService.scheduleExam(formData);
+
+      if (!scheduled) {
+        throw new Error(`We were unable to schedule your appointment.`);
+      }
+
+      return {
+        success: true,
+        message: 'Exam scheduled successfully.',
+      };
+    } catch (error) {
+      throw new InternalServerErrorException('Failed to schedule exame.');
+    }
+  }
 }

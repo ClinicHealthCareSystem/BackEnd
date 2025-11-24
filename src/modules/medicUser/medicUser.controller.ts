@@ -15,6 +15,7 @@ import { MedicService } from './medicUser.service';
 import { getMedicDto } from './dto/getMedicUser.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { PrismaService } from 'src/shared/services/prisma/prisma.service';
+import { formatDate } from 'src/shared/helpers/formatDate';
 
 @Controller('medic')
 export class MedicController {
@@ -65,5 +66,19 @@ export class MedicController {
     } catch (error) {
       throw new InternalServerErrorException('Failed to delete user');
     }
+  }
+
+  @Get('/schedulings')
+  async searchAppointments() {
+    const dataHoje = formatDate();
+
+    return await this.prisma.agendamento.findMany({
+      where: {
+        serviceDate: {
+          equals: dataHoje,
+        },
+      },
+      orderBy: { serviceDate: 'asc' },
+    });
   }
 }
