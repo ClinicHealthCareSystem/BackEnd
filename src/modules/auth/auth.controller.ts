@@ -12,6 +12,7 @@ import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/createAuthDto.dto';
 import { PrismaService } from 'src/shared/services/prisma/prisma.service';
+import { Throttle } from '@nestjs/throttler'; 
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,12 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @Throttle({
+    default:{
+      limit: 5,           
+      ttl:15000
+    }
+  })       
   signIn(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.signIn(createAuthDto);
   }

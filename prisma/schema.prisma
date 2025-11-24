@@ -13,22 +13,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum TipoAgendamento {
-  CONSULTA
-  EXAME
-}
-
-enum TipoAtendimento{
-  PRESENCIAL
-  REMOTO
-}
-
-enum StatusAgendamento {
-  PENDENTE
-  CONFIRMADO
-  CANCELADO
-}
-
 model User {
   id            String        @id @default(uuid())
   created_at    DateTime      @default(now())
@@ -96,57 +80,23 @@ model Medicamento {
   medicId        String?
   medico         MedicUser? @relation(fields: [medicId], references: [id])
   usuarioId      String
-  usuario        User @relation(fields: [usuarioId], references: [id])
+  usuario        User       @relation(fields: [usuarioId], references: [id])
 
   @@map("medicamento")
 }
 
 model Agendamento {
-  id          String        @id @default(uuid())
-  tipo        TipoAgendamento
-  data        DateTime      @default(now())
-  hora        String
-  status      StatusAgendamento @default(PENDENTE)
+  id             String     @id @default(uuid())
+  type           String
+  medicName      String
+  service        String
+  unit           String
+  serviceModel   String
+  serviceDate    String
+  serviceTime    String
 
-  usuario_id  String
-  medic_id    String
-  unidade_id  String
-  convenio_id String
-
-  usuario     User               @relation(fields: [usuario_id], references: [id])
-  medic       MedicUser          @relation(fields: [medic_id], references: [id])
-  unidade     Unidade            @relation(fields: [unidade_id], references: [id])
-  convenio    Convenio           @relation(fields: [convenio_id], references: [id])
-
-  consulta    Consulta?
-  exame       Exame?
-}
-
-model Consulta{
-  id          String        @id @default(uuid())
-  servico     String?
-  atendimento TipoAtendimento?
-  agendamento_id  String    @unique
-  agendamento Agendamento   @relation(fields: [agendamento_id], references: [id])
-}
-
-model Exame{
-  id             String       @id @default(uuid())
-  nome           String?
-  agendamento_id String       @unique
-  agendamento    Agendamento  @relation(fields: [agendamento_id], references: [id])
-}
-
-model Unidade{
-  id          String        @id @default(uuid())
-  nome        String        @unique
-
-  agendamento Agendamento[]
-}
-
-model Convenio{
-  id          String        @id @default(uuid())
-  nome        String        @unique
-
-  agendamento Agendamento[]
+  medicId        String?
+  medico         MedicUser? @relation(fields: [medicId], references: [id])
+  usuarioId      String
+  usuario        User       @relation(fields: [usuarioId], references: [id])
 }
