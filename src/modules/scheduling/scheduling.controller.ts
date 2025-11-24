@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   InternalServerErrorException,
+  Param,
   Post,
 } from '@nestjs/common';
 import { SchedulingService } from './scheduling.service';
@@ -10,12 +11,6 @@ import { SchedulingService } from './scheduling.service';
 @Controller('scheduling')
 export class SchedulingController {
   constructor(private readonly schedulingService: SchedulingService) {}
-
-  @Get('/')
-  async ok() {
-    console.log('ok');
-    return 'ok';
-  }
 
   @Post('/consultation')
   async schedulingConsultation(
@@ -29,8 +24,6 @@ export class SchedulingController {
         throw new Error(`We were unable to schedule your appointment.`);
       }
 
-      console.log('Controller:', scheduled);
-
       return {
         success: true,
         message: 'Appointment successfully scheduled.',
@@ -38,5 +31,10 @@ export class SchedulingController {
     } catch (error) {
       throw new InternalServerErrorException('Failed to schedule appointment.');
     }
+  }
+
+  @Get('/:userId')
+  async getSchedules(@Param('userId') userId: string) {
+    return this.schedulingService.getSchedules(userId);
   }
 }

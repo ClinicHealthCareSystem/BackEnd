@@ -6,7 +6,6 @@ export class SchedulingService {
   constructor(private readonly prisma: PrismaService) {}
 
   async scheduleAppointment(formData: any) {
-    console.log('service: ', formData);
     const scheduling = await this.prisma.agendamento.create({
       data: {
         type: formData.type,
@@ -26,5 +25,12 @@ export class SchedulingService {
     }
 
     return 'success';
+  }
+
+  async getSchedules(userId: string) {
+    return this.prisma.agendamento.findMany({
+      where: { usuarioId: userId },
+      orderBy: { serviceDate: 'asc' },
+    });
   }
 }
