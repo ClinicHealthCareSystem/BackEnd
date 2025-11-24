@@ -1,10 +1,4 @@
-import {
-  IsAlphanumeric,
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsAlphanumeric, IsNotEmpty, Length } from 'class-validator';
 
 export class CreateAuthDto {
   @Length(11, 11, {

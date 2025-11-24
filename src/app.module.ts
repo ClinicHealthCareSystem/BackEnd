@@ -5,40 +5,40 @@ import { PrismaModule } from './shared/services/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { GatewayModule } from './gateway/gatway.module';
-// import { AgendamentoModule } from './modules/agendamento/agendamento.module';
+import { SchedulingModule } from './modules/scheduling/scheduling.module';
 import { HttpModule } from '@nestjs/axios';
-import { PlanoModule } from './modules/plano/plano.module';
+import { PlansModule } from './modules/plans/plans.module';
 import { MedicModule } from './modules/medicUser/medicUser.module';
 import { MedicineModule } from './modules/medicines/medicine.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 
-
 @Module({
   imports: [
     ThrottlerModule.forRoot({
-      throttlers:[
-      {
-      ttl: 60000,  
-      limit: 100  
-      }
-      ],  
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 100,
+        },
+      ],
     }),
     PrismaModule,
     UserModule,
     MedicModule,
     AuthModule,
     GatewayModule,
-    // AgendamentoModule,
+    SchedulingModule,
     HttpModule,
-    PlanoModule,
+    PlansModule,
     MedicineModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
+  providers: [
+    AppService,
     {
       provide: APP_GUARD,
-      useClass: ThrottlerGuard  
+      useClass: ThrottlerGuard,
     },
   ],
 })
