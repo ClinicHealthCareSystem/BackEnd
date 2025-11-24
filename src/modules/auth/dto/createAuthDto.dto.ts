@@ -1,10 +1,4 @@
-import {
-  IsAlphanumeric,
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Length,
-} from 'class-validator';
+import { IsAlphanumeric, IsNotEmpty, Length } from 'class-validator';
 
 export class CreateAuthDto {
   @Length(11, 11, {
@@ -16,8 +10,8 @@ export class CreateAuthDto {
   })
   CPF: string;
 
-  @Length(6, 6, {
-    message: 'A senha precisa ter seis (6) caracteres',
+  @Length(8, 8, {
+    message: 'A senha precisa ter seis (8) caracteres',
   })
   @IsAlphanumeric()
   @IsNotEmpty({

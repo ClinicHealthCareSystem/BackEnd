@@ -118,4 +118,58 @@ export class UserService {
       throw new Error('Error updating user - ' + error.message);
     }
   }
+
+  async updateUserInfo(updatedUser: {
+    cpf: string;
+    email: string;
+    phone: string;
+    address: string;
+    phoneHelp: string | null;
+  }) {
+    try {
+      const { cpf, email, phone, address, phoneHelp } = updatedUser;
+      const existingUser = await this.prisma.user.findFirst({
+        where: {
+          CPF: cpf,
+        },
+      });
+
+      if (!existingUser) {
+        throw new Error('User Not Found');
+      }
+
+      return await this.prisma.user.update({
+        where: { CPF: cpf },
+        data: {
+          email,
+          phone,
+          address,
+          ...(phoneHelp !== undefined && { phoneHelp }),
+        },
+      });
+    } catch (error) {
+      throw new Error('Error updating user - ' + error.message);
+    }
+  }
+
+  async fetchAllUsers() {
+    try {
+      const users = await this.prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          age: true,
+          phone: true,
+        },
+      });
+
+      if (!users) {
+        throw new Error('error when fetching for users');
+      }
+
+      return users;
+    } catch (error) {
+      throw new Error('error when fetching for users - ' + error.message);
+    }
+  }
 }
