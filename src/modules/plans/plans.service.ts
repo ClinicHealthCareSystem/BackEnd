@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/shared/services/prisma/prisma.service';
+import { Planos } from '@prisma/client';
 
 @Injectable()
 export class PlansService {
@@ -22,10 +23,12 @@ export class PlansService {
         throw new NotFoundException('User not found');
       }
 
+      const plan = Planos[objPlan.planName as keyof typeof Planos];
+
       const updated = await this.prisma.user.update({
         where: { id: userId },
         data: {
-          plan: objPlan.planName,
+          plan: plan,
         },
         select: {
           id: true,

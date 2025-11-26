@@ -42,10 +42,16 @@ export class UserService {
 
   async createUser(user: CreateUserDto) {
     try {
+      
+      const year = new Date().getFullYear().toString();
+      const random = Math.floor(100 + Math.random() * 900).toString();
+      const lastTwoCpf = user.CPF.slice(-2);
+      const registration = `${year}${random}${lastTwoCpf}`;
+
       const hashPassword = await bcrypt.hash(user.password, 10);
 
       const createdUser = await this.prisma.user.create({
-        data: { ...user, password: hashPassword },
+        data: { ...user, password: hashPassword, registration: registration },
       });
 
       return createdUser;

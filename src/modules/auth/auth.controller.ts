@@ -12,7 +12,7 @@ import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/createAuthDto.dto';
 import { PrismaService } from 'src/shared/services/prisma/prisma.service';
-import { Throttle } from '@nestjs/throttler'; 
+import { Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -24,11 +24,11 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   @Throttle({
-    default:{
-      limit: 5,           
-      ttl:15000
-    }
-  })       
+    default: {
+      limit: 5,
+      ttl: 15000,
+    },
+  })
   signIn(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.signIn(createAuthDto);
   }
@@ -37,7 +37,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   async getProfile(@Request() req: any) {
     const userId = req.user.sub;
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -58,5 +58,18 @@ export class AuthController {
         registration: true,
       },
     });
+
+    if (!user) return null;
+
+    const planMap: Record<string, string> = {
+      Basico: 'Básico',
+      Pro: 'Pro',
+      Plus: 'Plus',
+    };
+
+    return {
+      ...user,
+      plan: user.plan ? planMap[user.plan] : null,
+    };
   }
 }

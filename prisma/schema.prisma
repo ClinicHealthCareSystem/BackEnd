@@ -24,7 +24,7 @@ model User {
   phone         String        @unique
   CPF           String        @unique
   password      String
-  plan          String?
+  plan          Planos?       @default(Basico)
   registration  String?       @unique
   email         String?       @unique
   age           Int?
@@ -108,4 +108,10 @@ model Agendamento {
 enum AgendamentoTipo {
   consulta
   exame
+}
+
+enum Planos {
+  Basico
+  Pro
+  Plus
 }
