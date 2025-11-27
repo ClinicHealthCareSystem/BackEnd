@@ -101,6 +101,7 @@ model Agendamento {
 
   exame        String?   
 
+  userName     String
   usuarioId    String
   usuario      User             @relation(fields: [usuarioId], references: [id])
 }

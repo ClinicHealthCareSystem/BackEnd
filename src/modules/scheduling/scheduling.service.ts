@@ -16,6 +16,7 @@ export class SchedulingService {
         serviceDate: formData.data,
         serviceTime: formData.horario,
         usuarioId: formData.userId,
+        userName: formData.username,
         medicId: formData.medicId ?? null,
       },
     });
@@ -44,6 +45,7 @@ export class SchedulingService {
         serviceDate: formData.data,
         serviceTime: formData.horario,
         usuarioId: formData.userId,
+        userName: formData.username,
         medicId: formData.medicId ?? null,
       },
     });
